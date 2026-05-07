@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HopeLink — A bridge of hope between lives</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">✦</span>
+        <span>Hope<em>Link</em></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#register" class="nav-link">Register</a></li>
+        <li><a href="#match" class="nav-link">Find Match</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="menu">☰</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-bg">
+      <video class="hero-video" autoplay loop muted playsinline>
+        <source src="images/Heart video.mp4" type="video/mp4">
+      </video>
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+
+      <h1 class="hero-title">Hope<em>Link</em></h1>
+      <p class="hero-sub">A bridge of hope between lives</p>
+      <p class="hero-desc">Bridging the gap between organ donors and recipients across India — faster, smarter, with
+        compassion at its core.</p>
+      <div class="hero-ctas">
+        <a href="#register" class="btn btn-primary">Become a Donor</a>
+        <a href="#match" class="btn btn-outline">Find a Match</a>
+      </div>
+    </div>
+    <div class="hero-stats" id="hero-stats">
+      <div class="stat-card"><span class="stat-num" id="stat-total">—</span><span class="stat-label">Active
+          Donors</span></div>
+      <div class="stat-card"><span class="stat-num" id="stat-recip">—</span><span class="stat-label">Recipients</span>
+      </div>
+      <div class="stat-card"><span class="stat-num">500K+</span><span class="stat-label">Awaiting Transplant</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Why It Matters</span>
+        <h2>A Crisis Hiding in Plain Sight</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>India's deceased organ donation rate has remained <strong>below one donor per million</strong> population
+            for over a decade. Thousands of patients lose their lives every year while waiting for a suitable organ.</p>
+          <p>HopeLink is a centralised, accessible platform that connects willing donors with recipients and medical
+            institutions — cutting through the noise of misinformation, logistical barriers, and bureaucracy.</p>
+          <ul class="feature-list">
+            <li><span class="fi">♥</span> Intelligent organ-compatibility matching</li>
+            <li><span class="fi">📍</span> State-prioritised donor discovery</li>
+            <li><span class="fi">🔒</span> Secure, private data handling</li>
+            <li><span class="fi">📋</span> Step-by-step process guidance</li>
+          </ul>
+        </div>
+        <div class="about-cards">
+          <div class="info-card accent-red">
+            <h3>Heart</h3>
+            <p>Matching via ejection fraction &amp; cardiac history</p>
+          </div>
+          <div class="info-card accent-amber">
+            <h3>Liver</h3>
+            <p>MELD score &amp; HLA typing compatibility</p>
+          </div>
+          <div class="info-card accent-teal">
+            <h3>Lungs</h3>
+            <p>Total lung capacity, DLCO &amp; FEV1 matching</p>
+          </div>
+          <div class="info-card accent-violet">
+            <h3>Pancreas</h3>
+            <p>Dimensions &amp; insulin secretion levels</p>
+          </div>
+        </div>
+      </div>
+      <div class="video-section" style="margin-top: 6rem;">
+        <div class="section-header" style="margin-bottom: 2rem;">
+          <span class="eyebrow">Discover</span>
+          <h2>The Miracle of Transplant</h2>
+        </div>
+        <div class="media-container" style="max-width: 900px; margin: 0 auto; border-radius: var(--radius);">
+          <div class="video-wrapper">
+            <video controls autoplay loop muted playsinline
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+              <source src="images/Heart video.mp4" type="video/mp4">
+              Your browser does not support the video element.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section id="register" class="register section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Join the Movement</span>
+        <h2>Register</h2>
+      </div>
+
+      <!-- Role tabs -->
+      <div class="reg-tabs">
+        <button class="reg-tab active" data-role="donor">I am a Donor</button>
+        <button class="reg-tab" data-role="recipient">I need an Organ</button>
+      </div>
+
+      <form id="reg-form" novalidate>
+        <!-- Personal Info -->
+        <fieldset class="form-section">
+          <legend>Personal Information</legend>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" required placeholder="Ananya Nair" />
+            </div>
+            <div class="form-group">
+              <label for="age">Age *</label>
+              <input type="number" id="age" name="age" min="18" max="75" required placeholder="25" />
+            </div>
+            <div class="form-group">
+              <label for="gender">Gender *</label>
+              <select id="gender" name="gender" required>
+                <option value="">Select</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="blood_group">Blood Group *</label>
+              <select id="blood_group" name="blood_group" required>
+                <option value="">Select</option>
+                <option>O+</option>
+                <option>O-</option>
+                <option>A+</option>
+                <option>A-</option>
+                <option>B+</option>
+                <option>B-</option>
+                <option>AB+</option>
+                <option>AB-</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" required placeholder="+91 9876543210" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required placeholder="you@example.com" />
+            </div>
+            <div class="form-group">
+              <label for="state">State of Residence *</label>
+              <select id="state" name="state" required>
+                <option value="">Select State</option>
+                <option>Andhra Pradesh</option>
+                <option>Arunachal Pradesh</option>
+                <option>Assam</option>
+                <option>Bihar</option>
+                <option>Chhattisgarh</option>
+                <option>Delhi</option>
+                <option>Goa</option>
+                <option>Gujarat</option>
+                <option>Haryana</option>
+                <option>Himachal Pradesh</option>
+                <option>Jharkhand</option>
+                <option>Karnataka</option>
+                <option>Kerala</option>
+                <option>Ladakh</option>
+                <option>Madhya Pradesh</option>
+                <option>Maharashtra</option>
+                <option>Manipur</option>
+                <option>Meghalaya</option>
+                <option>Mizoram</option>
+                <option>Nagaland</option>
+                <option>Odisha</option>
+                <option>Punjab</option>
+                <option>Rajasthan</option>
+                <option>Sikkim</option>
+                <option>Tamil Nadu</option>
+                <option>Telangana</option>
+                <option>Tripura</option>
+                <option>Uttar Pradesh</option>
+                <option>Uttarakhand</option>
+                <option>West Bengal</option>
+              </select>
+            </div>
+            <div class="form-group" id="organ-field">
+              <label for="organ">Organ to <span id="organ-label">Donate</span> *</label>
+              <select id="organ" name="organ" required>
+                <option value="">Select Organ</option>
+                <option value="Heart">Heart</option>
+                <option value="Liver">Liver</option>
+                <option value="Lungs">Lungs</option>
+                <option value="Pancreas">Pancreas</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Organ-specific fields -->
+        <fieldset class="form-section organ-fields" id="heart-fields" style="display:none">
+          <legend>Heart — Clinical Details</legend>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="prev_cardiac">Previous Cardiac Conditions</label>
+              <select id="prev_cardiac" name="prev_cardiac">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ejection_frac">Ejection Fraction (%)</label>
+              <input type="number" id="ejection_frac" name="ejection_frac" min="20" max="80" placeholder="55" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section organ-fields" id="liver-fields" style="display:none">
+          <legend>Liver — Clinical Details</legend>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="meld_score">MELD Score</label>
+              <input type="number" id="meld_score" name="meld_score" min="6" max="40" placeholder="10" />
+            </div>
+            <div class="form-group">
+              <label for="hla_typing">HLA Typing</label>
+              <input type="text" id="hla_typing" name="hla_typing" placeholder="A2-B7-DR15" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section organ-fields" id="lungs-fields" style="display:none">
+          <legend>Lungs — Clinical Details</legend>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="total_lung_cap">Total Lung Capacity (L)</label>
+              <input type="number" id="total_lung_cap" name="total_lung_cap" step="0.1" placeholder="6.0" />
+            </div>
+            <div class="form-group">
+              <label for="dlco">DLCO (mL/min/mmHg)</label>
+              <input type="number" id="dlco" name="dlco" step="0.1" placeholder="25.0" />
+            </div>
+            <div class="form-group">
+              <label for="fev1">FEV1 (L)</label>
+              <input type="number" id="fev1" name="fev1" step="0.1" placeholder="3.5" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section organ-fields" id="pancreas-fields" style="display:none">
+          <legend>Pancreas — Clinical Details</legend>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="pancreas_length">Length of Pancreas (cm)</label>
+              <input type="number" id="pancreas_length" name="pancreas_length" step="0.1" placeholder="15.0" />
+            </div>
+            <div class="form-group">
+              <label for="pancreas_width">Width (cm)</label>
+              <input type="number" id="pancreas_width" name="pancreas_width" step="0.1" placeholder="3.5" />
+            </div>
+            <div class="form-group">
+              <label for="pancreas_thick">Thickness (cm)</label>
+              <input type="number" id="pancreas_thick" name="pancreas_thick" step="0.1" placeholder="2.0" />
+            </div>
+            <div class="form-group">
+              <label for="insulin_levels">Insulin Secretion Levels (µU/mL)</label>
+              <input type="number" id="insulin_levels" name="insulin_levels" step="0.1" placeholder="12.0" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Emergency Contact -->
+        <fieldset class="form-section">
+          <legend>Emergency Contact</legend>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="emergency_name">Contact Name</label>
+              <input type="text" id="emergency_name" name="emergency_name" placeholder="Priya Mehta" />
+            </div>
+            <div class="form-group">
+              <label for="relationship">Relationship</label>
+              <input type="text" id="relationship" name="relationship" placeholder="Spouse" />
+            </div>
+            <div class="form-group">
+              <label for="emergency_phone">Contact Number</label>
+              <input type="tel" id="emergency_phone" name="emergency_phone" placeholder="+91 9876543211" />
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form-consent">
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent" required />
+            I hereby declare that all information provided is true to the best of my knowledge.
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="reg-submit">
+          <span id="reg-btn-text">Register as Donor</span>
+          <span id="reg-spinner" class="spinner" style="display:none">⏳</span>
+        </button>
+      </form>
+
+      <div id="reg-result" class="result-box" style="display:none"></div>
+    </div>
+  </section>
+
+  <!-- MATCH -->
+  <section id="match" class="match-section section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Donor Matching</span>
+        <h2>Find a Compatible Donor</h2>
+      </div>
+
+      <form id="match-form" novalidate>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="m_organ">Organ Needed *</label>
+            <select id="m_organ" name="organ_needed" required>
+              <option value="">Select Organ</option>
+              <option value="Heart">Heart</option>
+              <option value="Liver">Liver</option>
+              <option value="Lungs">Lungs</option>
+              <option value="Pancreas">Pancreas</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="m_blood">Blood Group *</label>
+            <select id="m_blood" name="blood_group" required>
+              <option value="">Select</option>
+              <option>O+</option>
+              <option>O-</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="m_state">Preferred State</label>
+            <select id="m_state" name="state">
+              <option value="">Any State</option>
+              <option>Andhra Pradesh</option>
+              <option>Bihar</option>
+              <option>Delhi</option>
+              <option>Gujarat</option>
+              <option>Himachal Pradesh</option>
+              <option>Karnataka</option>
+              <option>Kerala</option>
+              <option>Madhya Pradesh</option>
+              <option>Maharashtra</option>
+              <option>Manipur</option>
+              <option>Punjab</option>
+              <option>Rajasthan</option>
+              <option>Tamil Nadu</option>
+              <option>Telangana</option>
+              <option>Uttar Pradesh</option>
+              <option>West Bengal</option>
+            </select>
+          </div>
+          <!-- Heart fields -->
+          <div class="form-group match-organ-field heart-f" style="display:none">
+            <label for="m_cardiac">Previous Cardiac Conditions</label>
+            <select id="m_cardiac" name="prev_cardiac">
+              <option value="">Any</option>
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+          <div class="form-group match-organ-field heart-f" style="display:none">
+            <label for="m_ef">Min Ejection Fraction (%)</label>
+            <input type="number" id="m_ef" name="ejection_frac" placeholder="50" />
+          </div>
+          <!-- Liver fields -->
+          <div class="form-group match-organ-field liver-f" style="display:none">
+            <label for="m_hla">HLA Typing</label>
+            <input type="text" id="m_hla" name="hla_typing" placeholder="A2-B7-DR15" />
+          </div>
+          <!-- Lungs fields -->
+          <div class="form-group match-organ-field lungs-f" style="display:none">
+            <label for="m_tlc">Total Lung Capacity (L)</label>
+            <input type="number" id="m_tlc" name="total_lung_cap" step="0.1" placeholder="6.0" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="match-submit">
+          <span id="match-btn-text">🔍 Search Donors</span>
+          <span id="match-spinner" class="spinner" style="display:none">⏳</span>
+        </button>
+      </form>
+
+      <div id="match-results" class="match-results"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Get in Touch</span>
+        <h2>Contact Us</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>HopeLink</h3>
+          <p>📧 info@hopelink.org</p>
+          <p>📞 +1-800-555-0199</p>
+        </div>
+        <div class="contact-helplines">
+          <h3>National Helplines</h3>
+          <div class="helpline-card"><span>🏥</span>
+            <div><strong>NOTTO</strong>
+              <p>National Organ & Tissue Transplant Organisation<br />1800-11-4770</p>
+            </div>
+          </div>
+          <div class="helpline-card"><span>❤️</span>
+            <div><strong>MOHAN Foundation</strong>
+              <p>Awareness &amp; Counselling<br />044-45531121</p>
+            </div>
+          </div>
+          <div class="helpline-card"><span>🌐</span>
+            <div><strong>Organ India</strong>
+              <p>organindia.org<br />+91-11-4050-7777</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 HopeLink &nbsp;|&nbsp; Made with ♥ to save lives</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
