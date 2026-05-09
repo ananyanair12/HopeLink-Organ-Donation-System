@@ -2,7 +2,9 @@
    HOPELINK — Frontend JavaScript
    ============================================================ */
 
-const API = 'http://localhost:3000/api';
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000/api'
+    : 'https://hopelink-backend.up.railway.app/api'; // Replace with your Railway URL
 
 // ── Nav scroll highlight ─────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav-link');
@@ -21,14 +23,23 @@ const observer = new IntersectionObserver((entries) => {
 sections.forEach(s => observer.observe(s));
 
 // Hamburger menu
-document.getElementById('hamburger').addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.toggle('open');
+const hamburger = document.getElementById('hamburger');
+const navMenu = document.querySelector('.nav-links');
+
+hamburger.addEventListener('click', () => {
+    navMenu.classList.toggle('open');
+});
+
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        navMenu.classList.remove('open');
+    });
 });
 
 // ── Load stats ───────────────────────────────────────────────
 async function loadStats() {
     try {
-        const r = await fetch(`${API}/stats`);
+        const r = await authedFetch(`${API}/stats`);
         if (!r.ok) return;
         const data = await r.json();
         document.getElementById('stat-total').textContent = data.total || '—';
@@ -95,7 +106,7 @@ document.getElementById('reg-form').addEventListener('submit', async (e) => {
         : `${API}/register-recipient`;
 
     try {
-        const r = await fetch(endpoint, {
+        const r = await authedFetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -150,7 +161,7 @@ document.getElementById('match-form').addEventListener('submit', async (e) => {
     Object.keys(payload).forEach(k => { if (!payload[k]) delete payload[k]; });
 
     try {
-        const r = await fetch(`${API}/match`, {
+        const r = await authedFetch(`${API}/match`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -158,14 +169,21 @@ document.getElementById('match-form').addEventListener('submit', async (e) => {
         const data = await r.json();
 
         if (r.ok && data.donors && data.donors.length > 0) {
+            const urgencyHtml = data.urgency 
+                ? `<span class="urgency-badge urgency-${data.urgency}">Status: ${data.urgency}</span>` 
+                : '';
+
             const scope = data.scope === 'local'
                 ? `<span class="match-scope-badge scope-local">📍 Showing donors from your state</span>`
                 : `<span class="match-scope-badge scope-national">🌐 No local donors found — showing national results</span>`;
 
             const cards = data.donors.map((d, i) => buildDonorCard(d, payload.organ_needed, i)).join('');
-            results.innerHTML = `${scope}<div class="donor-cards">${cards}</div>`;
+            results.innerHTML = `${urgencyHtml}<br>${scope}<div class="donor-cards">${cards}</div>`;
         } else if (r.status === 404) {
-            results.innerHTML = `<div class="no-match">
+            const urgencyHtml = data.urgency 
+                ? `<span class="urgency-badge urgency-${data.urgency}">Status: ${data.urgency}</span>` 
+                : '';
+            results.innerHTML = `${urgencyHtml}<div class="no-match">
                 <h3>No Matches Found</h3>
                 <p>No compatible donors are currently registered. Please check back later or reach out to NOTTO (1800-11-4770).</p>
             </div>`;
@@ -183,6 +201,30 @@ document.getElementById('match-form').addEventListener('submit', async (e) => {
 
 function buildDonorCard(d, organ, idx) {
     const organSpecific = buildOrganDetails(d, organ);
+
+    // ML Score UI
+    let mlHtml = '';
+    if (d.compatibility_score !== undefined && d.compatibility_score !== null) {
+        const score = d.compatibility_score;
+        const colorClass = score >= 80 ? 'comp-high' : score >= 50 ? 'comp-med' : 'comp-low';
+        
+        const survivalHtml = (d.survival_probability !== undefined && d.survival_probability !== null)
+            ? `<div class="survival-rate">Estimated Success Rate: <strong>${d.survival_probability}%</strong></div>`
+            : '';
+
+        mlHtml = `
+        <div class="donor-compatibility">
+          <div class="comp-label">
+            <span>AI Compatibility Match</span>
+            <span class="comp-score-val">${score}%</span>
+          </div>
+          <div class="comp-bar-bg">
+            <div class="comp-bar-fill ${colorClass}" style="width: ${score}%"></div>
+          </div>
+          ${survivalHtml}
+        </div>`;
+    }
+
     return `
     <div class="donor-card" style="animation-delay:${idx * 0.07}s">
       <div class="donor-card-header">
@@ -199,6 +241,7 @@ function buildDonorCard(d, organ, idx) {
         ${d.emergency_name ? `<span><span class="donor-detail-label">Emergency:</span>${d.emergency_name} (${d.relationship})</span>` : ''}
         ${d.emergency_phone ? `<span><span class="donor-detail-label">Emrg. Ph:</span>${d.emergency_phone}</span>` : ''}
       </div>
+      ${mlHtml}
     </div>`;
 }
 
@@ -223,4 +266,309 @@ function buildOrganDetails(d, organ) {
         if (d.insulin_levels) rows.push(`<span><span class="donor-detail-label">Insulin:</span>${d.insulin_levels} µU/mL</span>`);
     }
     return rows.join('');
+}
+
+// ── Dashboard Logic ──────────────────────────────────────────
+let stateChart = null;
+let organChart = null;
+
+async function initDashboard() {
+    if (!authToken || currentUser?.role !== 'hospital') return;
+    
+    try {
+        // Fetch stats
+        const statsRes = await authedFetch(`${API}/stats`);
+        const stats = await statsRes.json();
+        document.getElementById('ds-heart').textContent = stats.hearts;
+        document.getElementById('ds-liver').textContent = stats.livers;
+        document.getElementById('ds-lung').textContent = stats.lungs;
+        document.getElementById('ds-pancreas').textContent = stats.pancreas;
+        document.getElementById('ds-recip').textContent = stats.recipients;
+
+        // Fetch Organ Counts per State
+        const countsRes = await authedFetch(`${API}/dashboard/organ-counts`);
+        let counts = await countsRes.json();
+        
+        // Fallback if data is empty
+        const totalCounts = (counts.hearts?.length || 0) + (counts.livers?.length || 0) + (counts.lungs?.length || 0) + (counts.pancreas?.length || 0);
+        if (totalCounts === 0) {
+            counts = {
+                hearts: [{state: 'Maharashtra', count: 5}, {state: 'Karnataka', count: 3}],
+                livers: [{state: 'Gujarat', count: 4}, {state: 'Maharashtra', count: 2}],
+                lungs: [{state: 'Delhi', count: 3}],
+                pancreas: [{state: 'Kerala', count: 2}]
+            };
+        }
+        
+        renderStateChart(counts);
+        renderOrganPieChart(stats);
+
+        // Fetch Recent Activity
+        const donorsRes = await authedFetch(`${API}/dashboard/recent-donors`);
+        const recentDonors = await donorsRes.json();
+        const dTable = document.querySelector('#recent-donors-table tbody');
+        dTable.innerHTML = recentDonors.map(d => `
+            <tr>
+                <td>${d.name}</td>
+                <td><span class="donor-organ-badge badge-${d.organ}">${d.organ}</span></td>
+                <td>${d.state}</td>
+            </tr>
+        `).join('');
+
+        const recipientsRes = await authedFetch(`${API}/dashboard/recent-recipients`);
+        const recentRecipients = await recipientsRes.json();
+        const rTable = document.querySelector('#recent-recipients-table tbody');
+        rTable.innerHTML = recentRecipients.map(r => `
+            <tr>
+                <td>${r.name}</td>
+                <td><span class="donor-organ-badge badge-${r.organ_needed}">${r.organ_needed}</span></td>
+                <td>${r.state}</td>
+            </tr>
+        `).join('');
+
+    } catch (err) {
+        console.error('Dashboard Error:', err);
+    }
+}
+
+function renderStateChart(counts) {
+    const states = new Set();
+    [counts.hearts || [], counts.livers || [], counts.lungs || [], counts.pancreas || []].forEach(arr => {
+        arr.forEach(item => states.add(item.state));
+    });
+    const stateList = Array.from(states);
+
+    const getData = (arr) => stateList.map(s => {
+        const found = arr.find(item => item.state === s);
+        return found ? found.count : 0;
+    });
+
+    if (stateChart) stateChart.destroy();
+    const ctx = document.getElementById('stateChart').getContext('2d');
+    stateChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: stateList,
+            datasets: [
+                { label: 'Hearts', data: getData(counts.hearts), backgroundColor: '#e05c6a' },
+                { label: 'Livers', data: getData(counts.livers), backgroundColor: '#e8a44a' },
+                { label: 'Lungs', data: getData(counts.lungs), backgroundColor: '#4ab8a0' },
+                { label: 'Pancreas', data: getData(counts.pancreas), backgroundColor: '#9b72e0' }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a8499' } },
+                y: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a8499' } }
+            },
+            plugins: { legend: { labels: { color: '#e8eaf0' } } }
+        }
+    });
+}
+
+function renderOrganPieChart(stats) {
+    if (organChart) organChart.destroy();
+    
+    // Fallback if stats are zero
+    let dataValues = [stats.hearts || 0, stats.livers || 0, stats.lungs || 0, stats.pancreas || 0];
+    if (dataValues.every(v => v === 0)) {
+        dataValues = [12, 8, 5, 3]; // Sample data
+    }
+
+    const ctx = document.getElementById('organChart').getContext('2d');
+    organChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Hearts', 'Livers', 'Lungs', 'Pancreas'],
+            datasets: [{
+                data: dataValues,
+                backgroundColor: ['#e05c6a', '#e8a44a', '#4ab8a0', '#9b72e0'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom', labels: { color: '#e8eaf0' } } }
+        }
+    });
+}
+
+// Observe dashboard section to load data when visible
+const dashObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+        initDashboard();
+        dashObserver.disconnect();
+    }
+}, { threshold: 0.1 });
+const dashSection = document.getElementById('dashboard');
+if (dashSection) dashObserver.observe(dashSection);
+
+// ── Notifications Logic ──────────────────────────────────────
+const socket = io();
+let notifCount = 0;
+const notifications = [];
+
+socket.on('new_donor', (data) => {
+    const msg = `🫀 A new ${data.organ} donor just registered in ${data.state}!`;
+    addNotification(msg, 'donor');
+    showToast(msg, 'donor');
+});
+
+socket.on('new_match', (data) => {
+    const msg = `✅ A new ${data.organ} donor-recipient match was just made!`;
+    addNotification(msg, 'match');
+    showToast(msg, 'match');
+});
+
+function addNotification(msg, type) {
+    notifCount++;
+    const badge = document.getElementById('notif-count');
+    badge.textContent = notifCount;
+    badge.style.display = 'block';
+
+    notifications.unshift({ msg, type, time: new Date() });
+    if (notifications.length > 5) notifications.pop();
+    updateNotifList();
+}
+
+function updateNotifList() {
+    const list = document.getElementById('notif-list');
+    if (notifications.length === 0) {
+        list.innerHTML = '<div class="notif-empty">No new notifications</div>';
+        return;
+    }
+    list.innerHTML = notifications.map(n => `
+        <div class="notif-item">
+            <strong>${n.type === 'match' ? 'New Match' : 'New Donor'}</strong>
+            ${n.msg}
+        </div>
+    `).join('');
+}
+
+function showToast(msg, type) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = msg;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'toastOut 0.5s ease forwards';
+        setTimeout(() => toast.remove(), 500);
+    }, 5000);
+}
+
+// Bell toggle
+const bell = document.getElementById('notif-bell');
+const dropdown = document.getElementById('notif-dropdown');
+if (bell) {
+    bell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+        if (dropdown.classList.contains('open')) {
+            notifCount = 0;
+            document.getElementById('notif-count').style.display = 'none';
+        }
+    });
+}
+document.addEventListener('click', () => dropdown.classList.remove('open'));
+
+// ── Authentication Logic ─────────────────────────────────────
+let authToken = null;
+let currentUser = null;
+
+const authModal = document.getElementById('auth-modal');
+const authForm = document.getElementById('auth-form');
+const authTabs = document.querySelectorAll('.auth-tab');
+const signupFields = document.getElementById('signup-fields');
+const authSubmit = document.getElementById('auth-submit');
+const authError = document.getElementById('auth-error');
+
+// UI Toggles
+document.getElementById('login-trigger')?.addEventListener('click', () => {
+    authModal.classList.add('open');
+});
+document.getElementById('auth-close')?.addEventListener('click', () => {
+    authModal.classList.remove('open');
+});
+
+authTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        authTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const isSignup = tab.dataset.tab === 'signup';
+        signupFields.style.display = isSignup ? 'block' : 'none';
+        authSubmit.textContent = isSignup ? 'Sign Up' : 'Login';
+        authError.textContent = '';
+    });
+});
+
+authForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(authForm);
+    const data = Object.fromEntries(formData.entries());
+    const isSignup = document.querySelector('.auth-tab.active').dataset.tab === 'signup';
+    
+    const endpoint = isSignup ? '/api/auth/signup' : '/api/auth/login';
+    
+    try {
+        const res = await fetch(`${API}${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        
+        if (!res.ok) throw new Error(result.error || 'Auth failed');
+        
+        if (isSignup) {
+            alert('Signup successful! Please login.');
+            document.querySelector('.auth-tab[data-tab="login"]').click();
+        } else {
+            authToken = result.token;
+            currentUser = result.user;
+            updateAuthUI();
+            authModal.classList.remove('open');
+            // Refresh stats/dashboard if needed
+            loadStats();
+            if (currentUser.role === 'hospital') {
+                initDashboard();
+            }
+        }
+    } catch (err) {
+        authError.textContent = err.message;
+    }
+});
+
+function updateAuthUI() {
+    const navAuth = document.getElementById('nav-auth');
+    const navUser = document.getElementById('nav-user');
+    const userDisplay = document.getElementById('user-display');
+    
+    if (authToken) {
+        navAuth.style.display = 'none';
+        navUser.style.display = 'flex';
+        userDisplay.textContent = `Hi, ${currentUser.name} (${currentUser.role})`;
+    } else {
+        navAuth.style.display = 'block';
+        navUser.style.display = 'none';
+    }
+}
+
+document.getElementById('logout-btn')?.addEventListener('click', () => {
+    authToken = null;
+    currentUser = null;
+    updateAuthUI();
+});
+
+// Update existing fetch calls to use authToken
+async function authedFetch(url, options = {}) {
+    if (authToken) {
+        options.headers = {
+            ...options.headers,
+            'Authorization': `Bearer ${authToken}`
+        };
+    }
+    return fetch(url, options);
 }
