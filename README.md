@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![HopeLink Banner](frontend/images/hero_organ_donation_1777830403.png)
+![HopeLink Banner](frontend/images/hopelink_banner.png)
 
 ### *Your Gift Lives On.*
 
