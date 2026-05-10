@@ -212,8 +212,6 @@ This project is licensed under the MIT License.
 
 **Made with ❤️ to save lives**
 
-*VIT Bhopal University — Project Exhibition 2 — April 2025*
-
 ⭐ **Star this repo if you find it meaningful!**
 
 </div>
