@@ -4,7 +4,7 @@
 
 const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:3000/api'
-    : 'https://hopelink-backend.up.railway.app/api'; // Replace with your Railway URL
+    : 'https://romantic-balance-production-5ab2.up.railway.app/api'; // Replace with your Railway URL
 
 // ── Nav scroll highlight ─────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav-link');
@@ -169,8 +169,8 @@ document.getElementById('match-form').addEventListener('submit', async (e) => {
         const data = await r.json();
 
         if (r.ok && data.donors && data.donors.length > 0) {
-            const urgencyHtml = data.urgency 
-                ? `<span class="urgency-badge urgency-${data.urgency}">Status: ${data.urgency}</span>` 
+            const urgencyHtml = data.urgency
+                ? `<span class="urgency-badge urgency-${data.urgency}">Status: ${data.urgency}</span>`
                 : '';
 
             const scope = data.scope === 'local'
@@ -180,8 +180,8 @@ document.getElementById('match-form').addEventListener('submit', async (e) => {
             const cards = data.donors.map((d, i) => buildDonorCard(d, payload.organ_needed, i)).join('');
             results.innerHTML = `${urgencyHtml}<br>${scope}<div class="donor-cards">${cards}</div>`;
         } else if (r.status === 404) {
-            const urgencyHtml = data.urgency 
-                ? `<span class="urgency-badge urgency-${data.urgency}">Status: ${data.urgency}</span>` 
+            const urgencyHtml = data.urgency
+                ? `<span class="urgency-badge urgency-${data.urgency}">Status: ${data.urgency}</span>`
                 : '';
             results.innerHTML = `${urgencyHtml}<div class="no-match">
                 <h3>No Matches Found</h3>
@@ -207,7 +207,7 @@ function buildDonorCard(d, organ, idx) {
     if (d.compatibility_score !== undefined && d.compatibility_score !== null) {
         const score = d.compatibility_score;
         const colorClass = score >= 80 ? 'comp-high' : score >= 50 ? 'comp-med' : 'comp-low';
-        
+
         const survivalHtml = (d.survival_probability !== undefined && d.survival_probability !== null)
             ? `<div class="survival-rate">Estimated Success Rate: <strong>${d.survival_probability}%</strong></div>`
             : '';
@@ -274,7 +274,7 @@ let organChart = null;
 
 async function initDashboard() {
     if (!authToken || currentUser?.role !== 'hospital') return;
-    
+
     try {
         // Fetch stats
         const statsRes = await authedFetch(`${API}/stats`);
@@ -288,18 +288,18 @@ async function initDashboard() {
         // Fetch Organ Counts per State
         const countsRes = await authedFetch(`${API}/dashboard/organ-counts`);
         let counts = await countsRes.json();
-        
+
         // Fallback if data is empty
         const totalCounts = (counts.hearts?.length || 0) + (counts.livers?.length || 0) + (counts.lungs?.length || 0) + (counts.pancreas?.length || 0);
         if (totalCounts === 0) {
             counts = {
-                hearts: [{state: 'Maharashtra', count: 5}, {state: 'Karnataka', count: 3}],
-                livers: [{state: 'Gujarat', count: 4}, {state: 'Maharashtra', count: 2}],
-                lungs: [{state: 'Delhi', count: 3}],
-                pancreas: [{state: 'Kerala', count: 2}]
+                hearts: [{ state: 'Maharashtra', count: 5 }, { state: 'Karnataka', count: 3 }],
+                livers: [{ state: 'Gujarat', count: 4 }, { state: 'Maharashtra', count: 2 }],
+                lungs: [{ state: 'Delhi', count: 3 }],
+                pancreas: [{ state: 'Kerala', count: 2 }]
             };
         }
-        
+
         renderStateChart(counts);
         renderOrganPieChart(stats);
 
@@ -369,7 +369,7 @@ function renderStateChart(counts) {
 
 function renderOrganPieChart(stats) {
     if (organChart) organChart.destroy();
-    
+
     // Fallback if stats are zero
     let dataValues = [stats.hearts || 0, stats.livers || 0, stats.lungs || 0, stats.pancreas || 0];
     if (dataValues.every(v => v === 0)) {
@@ -509,9 +509,9 @@ authForm?.addEventListener('submit', async (e) => {
     const formData = new FormData(authForm);
     const data = Object.fromEntries(formData.entries());
     const isSignup = document.querySelector('.auth-tab.active').dataset.tab === 'signup';
-    
+
     const endpoint = isSignup ? '/api/auth/signup' : '/api/auth/login';
-    
+
     try {
         const res = await fetch(`${API}${endpoint}`, {
             method: 'POST',
@@ -519,9 +519,9 @@ authForm?.addEventListener('submit', async (e) => {
             body: JSON.stringify(data)
         });
         const result = await res.json();
-        
+
         if (!res.ok) throw new Error(result.error || 'Auth failed');
-        
+
         if (isSignup) {
             alert('Signup successful! Please login.');
             document.querySelector('.auth-tab[data-tab="login"]').click();
@@ -545,7 +545,7 @@ function updateAuthUI() {
     const navAuth = document.getElementById('nav-auth');
     const navUser = document.getElementById('nav-user');
     const userDisplay = document.getElementById('user-display');
-    
+
     if (authToken) {
         navAuth.style.display = 'none';
         navUser.style.display = 'flex';
