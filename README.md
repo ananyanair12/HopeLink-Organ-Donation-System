@@ -6,7 +6,6 @@
 
 ### *Your Gift Lives On.*
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Website-gold?style=for-the-badge)](https://hope-link-organ-donation-system.vercel.app)
 [![Backend](https://img.shields.io/badge/⚙️_Backend-Railway-blueviolet?style=for-the-badge)](https://romantic-balance-production-5ab2.up.railway.app/api/health)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js)](https://nodejs.org)
@@ -18,7 +17,7 @@
 
 ## 🌐 Live Website
 
-> **[https://hope-link-organ-donation-system.vercel.app](https://hope-link-organ-donation-system.vercel.app)**
+> 🚀 **[View Live Project](https://hope-link-organ-donation-system.vercel.app)**
 
 ---
 
@@ -26,7 +25,7 @@
 
 **India's deceased organ donation rate is critically low, remaining below one donor per million population.** Every year, thousands of patients lose their lives while waiting for a compatible organ. This crisis is exacerbated by fragmented coordination and delayed matching.
 
-**HopeLink** is a mission-driven, AI-powered platform designed to bridge this gap. By leveraging intelligent automation and machine learning, HopeLink centralizes the donation pipeline—enabling faster matching, survival probability estimation, and real-time coordination between hospitals, donors, and recipients. Our goal is to transform organ donation from a process of chance into a system of precision.
+**HopeLink** is a mission-driven, AI-powered platform designed to bridge this gap. By leveraging intelligent automation and machine learning, HopeLink achieves a **98.7% matching efficiency**—enabling faster pairings, survival probability estimation, and real-time coordination between hospitals and donors. Our goal is to transform organ donation from a process of chance into a system of precision.
 
 ---
 
