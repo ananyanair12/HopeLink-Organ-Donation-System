@@ -24,9 +24,9 @@
       <ul class="nav-links">
         <li><a href="#home" class="nav-link active">Home</a></li>
         <li><a href="#about" class="nav-link">About</a></li>
-        <li><a href="#register" class="nav-link">Register</a></li>
         <li><a href="#match" class="nav-link">Find Match</a></li>
         <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+        <li><a href="#register" class="nav-link">Register</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
         <li class="nav-notif">
           <button id="notif-bell" class="bell-btn">
@@ -124,13 +124,185 @@
           <span class="eyebrow">Discover</span>
           <h2>The Miracle of Transplant</h2>
         </div>
-        <div class="media-container" style="max-width: 900px; margin: 0 auto; border-radius: var(--radius);">
+        <div class="media-container video-intro-container">
           <div class="video-wrapper">
-            <video controls autoplay loop muted playsinline
-              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
-              <source src="images/Heart video.mp4" type="video/mp4">
+            <video autoplay muted loop playsinline class="intro-video">
+              <source src="images/hopelink_intro.mp4" type="video/mp4">
               Your browser does not support the video element.
             </video>
+            <div class="video-overlay"></div>
+            <div class="video-text-overlay">
+              <h3>Every Second Counts</h3>
+              <p>HopeLink connects donors and recipients across India in real time</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- MATCH -->
+  <section id="match" class="match-section section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Donor Matching</span>
+        <h2>Find a Compatible Donor</h2>
+      </div>
+
+      <form id="match-form" novalidate>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="m_organ">Organ Needed *</label>
+            <select id="m_organ" name="organ_needed" required>
+              <option value="">Select Organ</option>
+              <option value="Heart">Heart</option>
+              <option value="Liver">Liver</option>
+              <option value="Lungs">Lungs</option>
+              <option value="Pancreas">Pancreas</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="m_blood">Blood Group *</label>
+            <select id="m_blood" name="blood_group" required>
+              <option value="">Select</option>
+              <option>O+</option>
+              <option>O-</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="m_state">Preferred State</label>
+            <select id="m_state" name="state">
+              <option value="">Any State</option>
+              <option>Andhra Pradesh</option>
+              <option>Bihar</option>
+              <option>Delhi</option>
+              <option>Gujarat</option>
+              <option>Himachal Pradesh</option>
+              <option>Karnataka</option>
+              <option>Kerala</option>
+              <option>Madhya Pradesh</option>
+              <option>Maharashtra</option>
+              <option>Manipur</option>
+              <option>Punjab</option>
+              <option>Rajasthan</option>
+              <option>Tamil Nadu</option>
+              <option>Telangana</option>
+              <option>Uttar Pradesh</option>
+              <option>West Bengal</option>
+            </select>
+          </div>
+          <!-- Heart fields -->
+          <div class="form-group match-organ-field heart-f" style="display:none">
+            <label for="m_cardiac">Previous Cardiac Conditions</label>
+            <select id="m_cardiac" name="prev_cardiac">
+              <option value="">Any</option>
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+          <div class="form-group match-organ-field heart-f" style="display:none">
+            <label for="m_ef">Min Ejection Fraction (%)</label>
+            <input type="number" id="m_ef" name="ejection_frac" placeholder="50" />
+          </div>
+          <!-- Liver fields -->
+          <div class="form-group match-organ-field liver-f" style="display:none">
+            <label for="m_hla">HLA Typing</label>
+            <input type="text" id="m_hla" name="hla_typing" placeholder="A2-B7-DR15" />
+          </div>
+          <!-- Lungs fields -->
+          <div class="form-group match-organ-field lungs-f" style="display:none">
+            <label for="m_tlc">Total Lung Capacity (L)</label>
+            <input type="number" id="m_tlc" name="total_lung_cap" step="0.1" placeholder="6.0" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="match-submit">
+          <span id="match-btn-text">🔍 Search Donors</span>
+          <span id="match-spinner" class="spinner" style="display:none">⏳</span>
+        </button>
+      </form>
+
+      <div id="match-results" class="match-results"></div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="dashboard section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Insights</span>
+        <h2>Hospital Dashboard</h2>
+      </div>
+
+      <div class="dash-stats">
+        <div class="dash-stat accent-red">
+          <span class="ds-label">Hearts</span>
+          <span class="ds-num" id="ds-heart">0</span>
+        </div>
+        <div class="dash-stat accent-amber">
+          <span class="ds-label">Livers</span>
+          <span class="ds-num" id="ds-liver">0</span>
+        </div>
+        <div class="dash-stat accent-teal">
+          <span class="ds-label">Lungs</span>
+          <span class="ds-num" id="ds-lung">0</span>
+        </div>
+        <div class="dash-stat accent-violet">
+          <span class="ds-label">Pancreas</span>
+          <span class="ds-num" id="ds-pancreas">0</span>
+        </div>
+        <div class="dash-stat">
+          <span class="ds-label">Total Recipients</span>
+          <span class="ds-num" id="ds-recip">0</span>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="dash-card">
+          <h3>Donors by State</h3>
+          <canvas id="stateChart"></canvas>
+        </div>
+        <div class="dash-card">
+          <h3>Organ Distribution</h3>
+          <canvas id="organChart"></canvas>
+        </div>
+      </div>
+
+      <div class="dash-tables">
+        <div class="dash-card">
+          <h3>Recent Donors</h3>
+          <div class="table-scroll">
+            <table id="recent-donors-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Organ</th>
+                  <th>State</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dash-card">
+          <h3>Recent Recipients</h3>
+          <div class="table-scroll">
+            <table id="recent-recipients-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Organ Needed</th>
+                  <th>State</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -349,173 +521,6 @@
       </form>
 
       <div id="reg-result" class="result-box" style="display:none"></div>
-    </div>
-  </section>
-
-  <!-- MATCH -->
-  <section id="match" class="match-section section">
-    <div class="container">
-      <div class="section-header">
-        <span class="eyebrow">Donor Matching</span>
-        <h2>Find a Compatible Donor</h2>
-      </div>
-
-      <form id="match-form" novalidate>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="m_organ">Organ Needed *</label>
-            <select id="m_organ" name="organ_needed" required>
-              <option value="">Select Organ</option>
-              <option value="Heart">Heart</option>
-              <option value="Liver">Liver</option>
-              <option value="Lungs">Lungs</option>
-              <option value="Pancreas">Pancreas</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="m_blood">Blood Group *</label>
-            <select id="m_blood" name="blood_group" required>
-              <option value="">Select</option>
-              <option>O+</option>
-              <option>O-</option>
-              <option>A+</option>
-              <option>A-</option>
-              <option>B+</option>
-              <option>B-</option>
-              <option>AB+</option>
-              <option>AB-</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="m_state">Preferred State</label>
-            <select id="m_state" name="state">
-              <option value="">Any State</option>
-              <option>Andhra Pradesh</option>
-              <option>Bihar</option>
-              <option>Delhi</option>
-              <option>Gujarat</option>
-              <option>Himachal Pradesh</option>
-              <option>Karnataka</option>
-              <option>Kerala</option>
-              <option>Madhya Pradesh</option>
-              <option>Maharashtra</option>
-              <option>Manipur</option>
-              <option>Punjab</option>
-              <option>Rajasthan</option>
-              <option>Tamil Nadu</option>
-              <option>Telangana</option>
-              <option>Uttar Pradesh</option>
-              <option>West Bengal</option>
-            </select>
-          </div>
-          <!-- Heart fields -->
-          <div class="form-group match-organ-field heart-f" style="display:none">
-            <label for="m_cardiac">Previous Cardiac Conditions</label>
-            <select id="m_cardiac" name="prev_cardiac">
-              <option value="">Any</option>
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-          </div>
-          <div class="form-group match-organ-field heart-f" style="display:none">
-            <label for="m_ef">Min Ejection Fraction (%)</label>
-            <input type="number" id="m_ef" name="ejection_frac" placeholder="50" />
-          </div>
-          <!-- Liver fields -->
-          <div class="form-group match-organ-field liver-f" style="display:none">
-            <label for="m_hla">HLA Typing</label>
-            <input type="text" id="m_hla" name="hla_typing" placeholder="A2-B7-DR15" />
-          </div>
-          <!-- Lungs fields -->
-          <div class="form-group match-organ-field lungs-f" style="display:none">
-            <label for="m_tlc">Total Lung Capacity (L)</label>
-            <input type="number" id="m_tlc" name="total_lung_cap" step="0.1" placeholder="6.0" />
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary" id="match-submit">
-          <span id="match-btn-text">🔍 Search Donors</span>
-          <span id="match-spinner" class="spinner" style="display:none">⏳</span>
-        </button>
-      </form>
-
-      <div id="match-results" class="match-results"></div>
-    </div>
-  </section>
-
-  <!-- DASHBOARD -->
-  <section id="dashboard" class="dashboard section">
-    <div class="container">
-      <div class="section-header">
-        <span class="eyebrow">Insights</span>
-        <h2>Hospital Dashboard</h2>
-      </div>
-
-      <div class="dash-stats">
-        <div class="dash-stat accent-red">
-          <span class="ds-label">Hearts</span>
-          <span class="ds-num" id="ds-heart">0</span>
-        </div>
-        <div class="dash-stat accent-amber">
-          <span class="ds-label">Livers</span>
-          <span class="ds-num" id="ds-liver">0</span>
-        </div>
-        <div class="dash-stat accent-teal">
-          <span class="ds-label">Lungs</span>
-          <span class="ds-num" id="ds-lung">0</span>
-        </div>
-        <div class="dash-stat accent-violet">
-          <span class="ds-label">Pancreas</span>
-          <span class="ds-num" id="ds-pancreas">0</span>
-        </div>
-        <div class="dash-stat">
-          <span class="ds-label">Total Recipients</span>
-          <span class="ds-num" id="ds-recip">0</span>
-        </div>
-      </div>
-
-      <div class="dash-grid">
-        <div class="dash-card">
-          <h3>Donors by State</h3>
-          <canvas id="stateChart"></canvas>
-        </div>
-        <div class="dash-card">
-          <h3>Organ Distribution</h3>
-          <canvas id="organChart"></canvas>
-        </div>
-      </div>
-
-      <div class="dash-tables">
-        <div class="dash-card">
-          <h3>Recent Donors</h3>
-          <div class="table-scroll">
-            <table id="recent-donors-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Organ</th>
-                  <th>State</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-        <div class="dash-card">
-          <h3>Recent Recipients</h3>
-          <div class="table-scroll">
-            <table id="recent-recipients-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Organ Needed</th>
-                  <th>State</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 

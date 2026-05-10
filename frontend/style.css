@@ -493,12 +493,54 @@ h2 {
   background: #000;
 }
 
-.video-wrapper iframe {
+.video-wrapper iframe,
+.video-wrapper video.intro-video {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+}
+
+.video-intro-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+}
+
+.video-text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+  width: 90%;
+}
+
+.video-text-overlay h3 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.video-text-overlay p {
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+  font-style: italic;
+  color: var(--accent);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* ── REGISTER ──────────────────────────────────────────────── */
@@ -689,8 +731,8 @@ select option {
 /* ── MATCH SECTION ─────────────────────────────────────────── */
 .match-section {
   background:
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
-    url('images/match_background_1777832589459.png') center/cover no-repeat fixed;
+    linear-gradient(to bottom, rgba(13, 15, 20, 0.9), rgba(19, 23, 32, 0.97)),
+    url('images/hero_organ_donation_1777830403465.png') center/cover no-repeat fixed;
 }
 
 .match-section form {
@@ -816,7 +858,9 @@ select option {
 
 /* ── DASHBOARD ────────────────────────────────────────────── */
 .dashboard {
-  background: var(--bg2);
+  background:
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('images/hero_organ_donation_1777830403465.png') center/cover no-repeat fixed;
 }
 
 .dash-stats {

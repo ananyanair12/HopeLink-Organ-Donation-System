@@ -2,9 +2,12 @@
    HOPELINK — Frontend JavaScript
    ============================================================ */
 
+const LOCAL_API = 'http://localhost:3000/api';
+const PROD_API = 'https://romantic-balance-production-5ab2.up.railway.app/api';
+
 const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000/api'
-    : 'https://romantic-balance-production-5ab2.up.railway.app/api'; // Replace with your Railway URL
+    ? LOCAL_API
+    : PROD_API;
 
 // ── Nav scroll highlight ─────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav-link');
@@ -39,13 +42,15 @@ navLinks.forEach(link => {
 // ── Load stats ───────────────────────────────────────────────
 async function loadStats() {
     try {
-        const r = await authedFetch(`${API}/stats`);
+        const r = await fetch(`${API}/stats`);
         if (!r.ok) return;
         const data = await r.json();
-        document.getElementById('stat-total').textContent = data.total || '—';
-        document.getElementById('stat-recip').textContent = data.recipients || '—';
-    } catch (_) {
-        // Server not running — leave dashes
+        const totalEl = document.getElementById('stat-total');
+        const recipEl = document.getElementById('stat-recip');
+        if (totalEl) totalEl.textContent = data.total !== undefined ? data.total : '0';
+        if (recipEl) recipEl.textContent = data.recipients !== undefined ? data.recipients : '0';
+    } catch (err) {
+        console.error('Failed to load stats:', err);
     }
 }
 loadStats();
@@ -289,16 +294,6 @@ async function initDashboard() {
         const countsRes = await authedFetch(`${API}/dashboard/organ-counts`);
         let counts = await countsRes.json();
 
-        // Fallback if data is empty
-        const totalCounts = (counts.hearts?.length || 0) + (counts.livers?.length || 0) + (counts.lungs?.length || 0) + (counts.pancreas?.length || 0);
-        if (totalCounts === 0) {
-            counts = {
-                hearts: [{ state: 'Maharashtra', count: 5 }, { state: 'Karnataka', count: 3 }],
-                livers: [{ state: 'Gujarat', count: 4 }, { state: 'Maharashtra', count: 2 }],
-                lungs: [{ state: 'Delhi', count: 3 }],
-                pancreas: [{ state: 'Kerala', count: 2 }]
-            };
-        }
 
         renderStateChart(counts);
         renderOrganPieChart(stats);
@@ -370,11 +365,7 @@ function renderStateChart(counts) {
 function renderOrganPieChart(stats) {
     if (organChart) organChart.destroy();
 
-    // Fallback if stats are zero
-    let dataValues = [stats.hearts || 0, stats.livers || 0, stats.lungs || 0, stats.pancreas || 0];
-    if (dataValues.every(v => v === 0)) {
-        dataValues = [12, 8, 5, 3]; // Sample data
-    }
+    const dataValues = [stats.hearts || 0, stats.livers || 0, stats.lungs || 0, stats.pancreas || 0];
 
     const ctx = document.getElementById('organChart').getContext('2d');
     organChart = new Chart(ctx, {
@@ -510,7 +501,7 @@ authForm?.addEventListener('submit', async (e) => {
     const data = Object.fromEntries(formData.entries());
     const isSignup = document.querySelector('.auth-tab.active').dataset.tab === 'signup';
 
-    const endpoint = isSignup ? '/api/auth/signup' : '/api/auth/login';
+    const endpoint = isSignup ? '/auth/signup' : '/auth/login';
 
     try {
         const res = await fetch(`${API}${endpoint}`, {
