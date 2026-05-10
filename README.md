@@ -24,35 +24,44 @@
 
 ## 📌 About
 
-**HopeLink** is an AI-powered organ donation platform that connects organ donors with recipients across India — faster, smarter, and with compassion at its core.
+**India's deceased organ donation rate is critically low, remaining below one donor per million population.** Every year, thousands of patients lose their lives while waiting for a compatible organ. This crisis is exacerbated by fragmented coordination and delayed matching.
 
-India's deceased organ donation rate has remained **below one donor per million population** for over a decade. Thousands of patients lose their lives every year waiting for a suitable organ. HopeLink addresses this crisis through a centralised, accessible, and intelligent matching platform.
+**HopeLink** is a mission-driven, AI-powered platform designed to bridge this gap. By leveraging intelligent automation and machine learning, HopeLink centralizes the donation pipeline—enabling faster matching, survival probability estimation, and real-time coordination between hospitals, donors, and recipients. Our goal is to transform organ donation from a process of chance into a system of precision.
 
 ---
 
 ## ✨ Features
 
-| Feature | Description |
+| Feature | Implementation |
 |---|---|
-| 🔍 **AI Donor Matching** | Matches recipients with compatible donors using blood group compatibility + organ-specific parameters |
-| 🧠 **ML Compatibility Scoring** | Random Forest model scores each donor-recipient pair 0–100% |
-| 📊 **Survival Prediction** | Logistic Regression model estimates transplant success probability |
-| 🏥 **Hospital Dashboard** | Real-time stats, charts (donors by state, organ distribution), recent activity |
-| 🔔 **Real-time Notifications** | Socket.io powered alerts for new donors and matches |
-| 🔐 **JWT Authentication** | Secure login for donors, recipients, and hospital staff |
-| 📍 **Location Priority** | Searches same-state donors first, falls back to national |
-| 📱 **Fully Responsive** | Works on desktop, tablet, and mobile |
+| 🔍 **AI Compatibility Matching** | Random Forest model (Scikit-learn) calculates 0–100% match scores based on clinical metrics |
+| 📊 **Survival Prediction** | Logistic Regression model estimates transplant success probability for each pairing |
+| ⚡ **Real-time Sync** | **Socket.io** enables instant notifications for new donors and critical matches |
+| 🏥 **Hospital Command Center** | Data-driven dashboard with organ distribution charts and regional stats |
+| 🛡️ **Secure Role-based Access** | Multi-tenant auth using **JWT** for Donors, Recipients, and Hospital Staff |
+| 📍 **Geographic Priority Engine** | Intelligent routing that prioritizes local state matches before scaling nationally |
+| 🌡️ **Urgency Scoring** | Dynamic triage system (Critical/High/Moderate) based on MELD and EF scores |
 
 ---
 
-## 🧬 Organ Matching Logic
+## 🧬 Multi-Tier Matching Logic
 
-| Organ | Matching Parameters |
-|---|---|
-| ❤️ Heart | Blood group + Ejection Fraction (±10%) + Cardiac history |
-| 🫀 Liver | Blood group + HLA Typing + MELD Score |
-| 🫁 Lungs | Blood group + Total Lung Capacity (±1L) + DLCO + FEV1 |
-| 🫐 Pancreas | Blood group + Dimensions + Insulin Secretion Levels |
+HopeLink employs a sophisticated three-tier filtering system to ensure clinical safety and optimal outcomes:
+
+### Tier 1: Biological Foundation (Blood Type)
+The system enforces strict blood group compatibility using a universal donor/recipient matrix (e.g., O- as universal donor, AB+ as universal recipient).
+
+### Tier 2: Clinical Metrics & Organ Specifics
+Each organ has a specialized matching algorithm:
+- ❤️ **Heart**: EF (Ejection Fraction) within ±10% range + Cardiac history check.
+- 🫀 **Liver**: HLA Typing + MELD (Model for End-Stage Liver Disease) Score matching.
+- 🫁 **Lungs**: Total Lung Capacity (±1L tolerance) + DLCO & FEV1 metrics.
+- 🫐 **Pancreas**: Dimension matching (L/W/T) + Insulin secretion level analysis.
+
+### Tier 3: Geographic & ML Optimization
+- **State Priority**: To minimize ischemic time (time an organ is outside the body), the system first queries donors within the same state.
+- **National Fallback**: If no local match exists, the search expands nationwide.
+- **ML Scoring**: Finally, the **MatchPredictor** (Random Forest) and **SurvivalPredictor** (Logistic Regression) provide percentage-based confidence scores to help doctors make the final decision.
 
 ---
 
@@ -62,22 +71,19 @@ India's deceased organ donation rate has remained **below one donor per million 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
-![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=flat&logo=socket.io)
+![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=flat&logo=socket.io) — Real-time event handling
 
-### Backend
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-000000?style=flat&logo=jsonwebtokens)
+### Backend (Node.js)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white) — REST API Framework
+![JWT](https://img.shields.io/badge/JWT-000000?style=flat&logo=jsonwebtokens) — Secure Authentication
+![Bcrypt](https://img.shields.io/badge/Bcrypt-000000?style=flat&logo=npm) — Password Hashing
+![MySQL2](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white) — Relational DB management
 
-### AI / ML
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-000000?style=flat&logo=flask)
-![Scikit-learn](https://img.shields.io/badge/Scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)
-
-### Database & Deployment
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
-![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=flat&logo=railway)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel)
+### AI / ML (Python)
+![Flask](https://img.shields.io/badge/Flask-000000?style=flat&logo=flask) — ML Inference Server
+![Scikit-learn](https://img.shields.io/badge/Scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white) — Random Forest & Logistic Regression
+![Joblib](https://img.shields.io/badge/Joblib-grey?style=flat) — Model Serialization
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat&logo=pandas&logoColor=white) — Data Preprocessing
 
 ---
 
@@ -90,29 +96,30 @@ India's deceased organ donation rate has remained **below one donor per million 
 
 ### Installation
 
+1. **Clone the repository**
 ```bash
-# Clone the repository
 git clone https://github.com/ananyanair12/HopeLink-Organ-Donation-System.git
 cd HopeLink-Organ-Donation-System
+```
 
-# Setup database
-mysql -u root -p < database/schema.sql
+2. **Setup Database**
+- Import `database/schema.sql` into your MySQL server.
+```bash
+mysql -u your_user -p < database/schema.sql
+```
 
-# Install backend dependencies
+3. **Backend Configuration**
+```bash
 cd backend
 npm install
-
-# Create environment file
 cp .env.example .env
-# Edit .env with your database credentials
-
-# Start backend server
+# Configure DB_HOST, DB_USER, DB_PASS, DB_NAME in .env
 npm start
 ```
 
-### Run ML Server (optional)
+4. **Machine Learning Server**
 ```bash
-cd ml
+cd ../ml
 pip install -r requirements.txt
 python app.py
 ```
