@@ -7,6 +7,8 @@ const API = isLocal
   ? 'http://localhost:3000/api'
   : 'https://romantic-balance-production-5ab2.up.railway.app/api';
 
+console.log('API URL:', API);
+
 // ── Nav scroll highlight ─────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('section[id]');
@@ -394,21 +396,30 @@ const dashSection = document.getElementById('dashboard');
 if (dashSection) dashObserver.observe(dashSection);
 
 // ── Notifications Logic ──────────────────────────────────────
-const socket = io();
+let socket;
+try {
+    socket = typeof io !== 'undefined' ? io(API.replace('/api', '')) : null;
+    if (socket) {
+        socket.on('new_donor', (data) => {
+            const msg = `🫀 A new ${data.organ} donor just registered in ${data.state}!`;
+            addNotification(msg, 'donor');
+            showToast(msg, 'donor');
+        });
+
+        socket.on('new_match', (data) => {
+            const msg = `✅ A new ${data.organ} donor-recipient match was just made!`;
+            addNotification(msg, 'match');
+            showToast(msg, 'match');
+        });
+    } else {
+        console.warn('Socket.io client not loaded. Notifications will be disabled.');
+    }
+} catch (e) {
+    console.error('Socket initialization failed:', e);
+}
+
 let notifCount = 0;
 const notifications = [];
-
-socket.on('new_donor', (data) => {
-    const msg = `🫀 A new ${data.organ} donor just registered in ${data.state}!`;
-    addNotification(msg, 'donor');
-    showToast(msg, 'donor');
-});
-
-socket.on('new_match', (data) => {
-    const msg = `✅ A new ${data.organ} donor-recipient match was just made!`;
-    addNotification(msg, 'match');
-    showToast(msg, 'match');
-});
 
 function addNotification(msg, type) {
     notifCount++;
@@ -464,8 +475,16 @@ if (bell) {
 document.addEventListener('click', () => dropdown.classList.remove('open'));
 
 // ── Authentication Logic ─────────────────────────────────────
-let authToken = null;
-let currentUser = null;
+let authToken = localStorage.getItem('hopelink_token') || null;
+let currentUser = JSON.parse(localStorage.getItem('hopelink_user')) || null;
+
+if (authToken) {
+    setTimeout(() => {
+        updateAuthUI();
+        loadStats();
+        if (currentUser?.role === 'hospital') initDashboard();
+    }, 100);
+}
 
 const authModal = document.getElementById('auth-modal');
 const authForm = document.getElementById('auth-form');
@@ -517,6 +536,8 @@ authForm?.addEventListener('submit', async (e) => {
         } else {
             authToken = result.token;
             currentUser = result.user;
+            localStorage.setItem('hopelink_token', authToken);
+            localStorage.setItem('hopelink_user', JSON.stringify(currentUser));
             updateAuthUI();
             authModal.classList.remove('open');
             // Refresh stats/dashboard if needed
@@ -548,6 +569,8 @@ function updateAuthUI() {
 document.getElementById('logout-btn')?.addEventListener('click', () => {
     authToken = null;
     currentUser = null;
+    localStorage.removeItem('hopelink_token');
+    localStorage.removeItem('hopelink_user');
     updateAuthUI();
 });
 

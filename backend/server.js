@@ -12,8 +12,18 @@ const mysql = require('mysql2');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, {
+    cors: {
+        origin: [
+            'http://localhost:3000',
+            'http://localhost:5500',
+            'http://127.0.0.1:5500',
+            'https://hope-link-organ-donation-system.vercel.app'
+        ],
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -141,15 +151,17 @@ const axios = require('axios');
 async function attachMLScores(donors, recipient) {
     const promises = donors.map(async (donor) => {
         try {
+            const ML_BASE_URL = process.env.ML_URL || 'http://localhost:5001';
+            
             // Get Compatibility Score
-            const compRes = await axios.post('http://localhost:5001/predict', {
+            const compRes = await axios.post(`${ML_BASE_URL}/predict`, {
                 donor: donor,
                 recipient: recipient
             });
             donor.compatibility_score = compRes.data.compatibility_score;
 
             // Get Survival Probability
-            const survRes = await axios.post('http://localhost:5001/predict-survival', {
+            const survRes = await axios.post(`${ML_BASE_URL}/predict-survival`, {
                 donor: donor,
                 recipient: recipient,
                 compatibility_score: donor.compatibility_score
