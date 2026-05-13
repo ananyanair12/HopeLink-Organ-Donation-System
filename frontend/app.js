@@ -2,12 +2,10 @@
    HOPELINK — Frontend JavaScript
    ============================================================ */
 
-const LOCAL_API = 'http://localhost:3000/api';
-const PROD_API = 'https://romantic-balance-production-5ab2.up.railway.app/api';
-
-const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? LOCAL_API
-    : PROD_API;
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API = isLocal 
+  ? 'http://localhost:3000/api'
+  : 'https://romantic-balance-production-5ab2.up.railway.app/api';
 
 // ── Nav scroll highlight ─────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav-link');

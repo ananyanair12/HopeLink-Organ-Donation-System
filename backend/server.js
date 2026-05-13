@@ -22,7 +22,14 @@ const JWT_SECRET = process.env.JWT_SECRET || 'hopelink_secret_2025_999';
 const PORT = process.env.PORT || 3000;
 
 // ── Middleware ───────────────────────────────────────────────
-app.use(cors({ origin: '*' }));
+app.use(cors({
+    origin: [
+        'http://localhost:5500',
+        'http://localhost:3000',
+        'https://hope-link-organ-donation-system.vercel.app'
+    ],
+    credentials: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
