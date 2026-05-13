@@ -396,9 +396,17 @@ const dashSection = document.getElementById('dashboard');
 if (dashSection) dashObserver.observe(dashSection);
 
 // ── Notifications Logic ──────────────────────────────────────
+const BACKEND_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000'
+  : 'https://romantic-balance-production-5ab2.up.railway.app';
+
 let socket;
 try {
-    socket = typeof io !== 'undefined' ? io(API.replace('/api', '')) : null;
+    socket = io(BACKEND_URL, { 
+        transports: ['polling'],
+        reconnection: true 
+    });
+
     if (socket) {
         socket.on('new_donor', (data) => {
             const msg = `🫀 A new ${data.organ} donor just registered in ${data.state}!`;
@@ -411,11 +419,9 @@ try {
             addNotification(msg, 'match');
             showToast(msg, 'match');
         });
-    } else {
-        console.warn('Socket.io client not loaded. Notifications will be disabled.');
     }
 } catch (e) {
-    console.error('Socket initialization failed:', e);
+    console.warn('Socket.io not available:', e);
 }
 
 let notifCount = 0;
