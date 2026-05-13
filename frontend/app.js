@@ -9,6 +9,99 @@ const API = isLocal
 
 console.log('API URL:', API);
 
+// ── Auth Gate & Intro Logic ──────────────────────────────────
+const introPage = document.getElementById('intro-page');
+const mainSite = document.getElementById('main-site');
+
+function checkAuth() {
+    if (authToken) {
+        introPage.style.display = 'none';
+        mainSite.style.display = 'block';
+        mainSite.classList.add('active');
+        updateAuthUI();
+        loadStats();
+        if (currentUser?.role === 'hospital') initDashboard();
+    } else {
+        introPage.style.display = 'block';
+        mainSite.style.display = 'none';
+        mainSite.classList.remove('active');
+        initIntroPage();
+    }
+}
+
+function enterSite() {
+    introPage.classList.add('fade-out');
+    setTimeout(() => {
+        introPage.style.display = 'none';
+        mainSite.style.display = 'block';
+        mainSite.classList.add('active', 'fade-in');
+        window.scrollTo(0, 0);
+    }, 800);
+}
+
+function exitSite() {
+    mainSite.classList.remove('fade-in');
+    mainSite.style.display = 'none';
+    introPage.style.display = 'block';
+    introPage.classList.remove('fade-out');
+    window.scrollTo(0, 0);
+    initIntroPage();
+}
+
+function initIntroPage() {
+    // Reveal text on scroll
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.reveal-text').forEach(el => revealObserver.observe(el));
+
+    // Counter animation
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseInt(entry.target.dataset.target);
+                animateCounter(entry.target, target);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+}
+
+function animateCounter(el, target) {
+    let current = 0;
+    const duration = 2000;
+    const step = target / (duration / 16);
+    
+    function update() {
+        current += step;
+        if (current < target) {
+            el.textContent = Math.floor(current).toLocaleString();
+            requestAnimationFrame(update);
+        } else {
+            el.textContent = target.toLocaleString();
+        }
+    }
+    update();
+}
+
+// Intro CTA handlers
+document.querySelector('.intro-login-btn')?.addEventListener('click', () => {
+    document.querySelector('.auth-tab[data-tab="login"]').click();
+    authModal.classList.add('open');
+});
+
+document.querySelector('.intro-signup-btn')?.addEventListener('click', () => {
+    document.querySelector('.auth-tab[data-tab="signup"]').click();
+    authModal.classList.add('open');
+});
+
 // ── Nav scroll highlight ─────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('section[id]');
@@ -486,10 +579,10 @@ let currentUser = JSON.parse(localStorage.getItem('hopelink_user')) || null;
 
 if (authToken) {
     setTimeout(() => {
-        updateAuthUI();
-        loadStats();
-        if (currentUser?.role === 'hospital') initDashboard();
+        checkAuth();
     }, 100);
+} else {
+    checkAuth();
 }
 
 const authModal = document.getElementById('auth-modal');
@@ -546,6 +639,7 @@ authForm?.addEventListener('submit', async (e) => {
             localStorage.setItem('hopelink_user', JSON.stringify(currentUser));
             updateAuthUI();
             authModal.classList.remove('open');
+            enterSite();
             // Refresh stats/dashboard if needed
             loadStats();
             if (currentUser.role === 'hospital') {
@@ -578,6 +672,7 @@ document.getElementById('logout-btn')?.addEventListener('click', () => {
     localStorage.removeItem('hopelink_token');
     localStorage.removeItem('hopelink_user');
     updateAuthUI();
+    exitSite();
 });
 
 // Update existing fetch calls to use authToken
