@@ -17,6 +17,10 @@
   <!-- INTRO PAGE (Landing) -->
   <div id="intro-page">
     <section class="intro-section intro-hero">
+      <video class="intro-bg-video" autoplay loop muted playsinline>
+        <source src="images/internal_organ.mp4" type="video/mp4">
+      </video>
+      <div class="intro-video-overlay"></div>
       <div class="ecg-container">
         <svg class="ecg-svg" viewBox="0 0 1000 100">
           <path class="ecg-line" d="M0,50 L200,50 L210,40 L220,60 L230,20 L240,80 L250,50 L400,50 L410,10 L420,90 L430,50 L600,50 L610,45 L620,55 L630,50 L800,50 L810,30 L820,70 L830,50 L1000,50" />
@@ -34,6 +38,14 @@
     </section>
 
     <section class="intro-section intro-stats">
+      <div class="particles-container">
+        <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+        <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+        <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+        <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+        <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+      </div>
+      <div class="gold-divider-top"></div>
       <div class="intro-stats-grid">
         <div class="intro-stat-card">
           <div class="stat-big"><span class="counter" data-target="1">&lt; 1</span></div>
@@ -48,16 +60,43 @@
           <p>Saved by one single donor</p>
         </div>
       </div>
+      <div class="gold-divider-bottom"></div>
     </section>
 
     <section class="intro-section intro-mission">
-      <div class="mission-box">
-        <div class="heart-pulse">❤️</div>
-        <h2 class="mission-title">HopeLink connects donors with recipients across India — in real time.</h2>
-        <p class="mission-tagline">Your Gift Lives On.</p>
-        <div class="intro-auth-btns">
-          <button class="btn btn-primary btn-lg intro-login-btn">Login to Continue</button>
-          <button class="btn btn-outline btn-lg intro-signup-btn">Join the Movement</button>
+      <div class="mission-grid">
+        <div class="mission-text-col">
+          <div class="mission-box">
+            <h2 class="mission-title">HopeLink connects donors with recipients across India — in real time.</h2>
+            <p class="mission-tagline">Your Gift Lives On.</p>
+            <div class="intro-auth-btns">
+              <button class="btn btn-primary btn-lg intro-login-btn">Login to Continue</button>
+              <button class="btn btn-outline btn-lg intro-signup-btn">Join the Movement</button>
+            </div>
+          </div>
+        </div>
+        <div class="mission-map-col">
+          <div class="map-heart-pulse">❤️</div>
+          <svg class="india-map-svg" viewBox="0 0 500 600">
+            <!-- Simplified abstract India outline -->
+            <path class="india-outline" d="M 200 50 C 250 50 280 80 300 120 C 350 130 400 150 420 200 C 450 250 420 300 380 350 C 350 400 300 450 280 500 C 250 550 220 550 200 500 C 150 450 100 350 80 250 C 60 150 150 80 200 50 Z" />
+            
+            <!-- Connection Lines -->
+            <path class="map-line line-1" d="M 220 180 L 160 320" /> <!-- Delhi -> Mumbai -->
+            <path class="map-line line-2" d="M 160 320 L 230 450" /> <!-- Mumbai -> Bangalore -->
+            <path class="map-line line-3" d="M 230 450 L 280 430" /> <!-- Bangalore -> Chennai -->
+            <path class="map-line line-4" d="M 280 430 L 240 370" /> <!-- Chennai -> Hyderabad -->
+            <path class="map-line line-5" d="M 240 370 L 350 280" /> <!-- Hyderabad -> Kolkata -->
+            <path class="map-line line-6" d="M 350 280 L 220 180" /> <!-- Kolkata -> Delhi -->
+            
+            <!-- City Dots -->
+            <circle class="map-dot" cx="220" cy="180" r="6" /> <!-- Delhi -->
+            <circle class="map-dot" cx="160" cy="320" r="6" /> <!-- Mumbai -->
+            <circle class="map-dot" cx="230" cy="450" r="6" /> <!-- Bangalore -->
+            <circle class="map-dot" cx="280" cy="430" r="6" /> <!-- Chennai -->
+            <circle class="map-dot" cx="240" cy="370" r="6" /> <!-- Hyderabad -->
+            <circle class="map-dot" cx="350" cy="280" r="6" /> <!-- Kolkata -->
+          </svg>
         </div>
       </div>
     </section>
