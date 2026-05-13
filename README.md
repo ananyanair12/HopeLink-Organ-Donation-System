@@ -59,7 +59,7 @@ MySQL Database          Flask ML Server
 ```
 
 - The Express server serves the frontend as static files and handles all API routes
-- Socket.io runs on the same HTTP server instance as Express
+- Socket.io runs on the same HTTP server instance as Express (auto-served at `/socket.io/socket.io.js`)
 - The Flask ML server is a separate process; the backend calls it per match request
 - In production, both backend and ML server are co-located on Railway
 
@@ -146,7 +146,7 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env`:
+Edit `.env` (environment variables are loaded via `dotenv`):
 
 ```
 DB_HOST=localhost
@@ -168,13 +168,21 @@ Backend and frontend are both served at `http://localhost:3000`.
 
 ```bash
 cd ../ml
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 python app.py
 ```
 
 Runs at `http://localhost:5001`. This step is optional — if the ML server is not running, match results are still returned without AI scores.
 
-### 5. Open in browser
+### 5. Quick Test Credentials
+
+To explore the role-based features immediately, you can use the seeded hospital account:
+- **Email**: `admin@hospital.com`
+- **Password**: `hospital123`
+
+### 6. Open in browser
 
 ```
 http://localhost:3000
