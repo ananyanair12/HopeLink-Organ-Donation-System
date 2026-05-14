@@ -1498,8 +1498,7 @@ footer {
 }
 
 .heart-pulse {
-  font-size: 5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   animation: heartPulse 1.5s infinite;
   display: inline-block;
 }
@@ -1730,19 +1729,31 @@ footer {
 }
 
 .mission-title {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  line-height: 1.15;
+  font-size: clamp(2.5rem, 4.5vw, 4rem);
+  font-weight: 300;
+  line-height: 1.2;
   margin-bottom: 2rem;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0,0,0,0.6);
 }
 
 .mission-tagline {
-  margin-bottom: 3.5rem;
+  margin-bottom: 3rem;
+  font-size: 1.5rem;
   text-shadow: 0 4px 10px rgba(0, 0, 0, 0.9);
 }
 
 .intro-auth-btns {
+  display: flex;
+  gap: 1rem;
   justify-content: flex-start;
+}
+
+.intro-auth-btns .btn {
+  border-radius: 4px;
+  padding: 1.2rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .map-heart-pulse {
