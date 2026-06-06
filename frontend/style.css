@@ -1675,45 +1675,33 @@ footer {
 .intro-mission {
   position: relative;
   overflow: hidden;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  justify-content: center;
-  gap: 6rem;
-  padding: 4rem 10%;
+  gap: 4rem;
+  padding: 0 5rem;
   background: #0d0f14;
   min-height: 100vh;
 }
 
-.mission-bg-container {
-  order: 2;
-  position: relative;
-  width: 500px;
-  max-width: 45vw;
-  height: auto;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.immersive-india-img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 0 60px rgba(200, 169, 110, 0.15), 0 0 20px rgba(0, 0, 0, 0.8);
-}
-
-.mission-bg-overlay {
-  display: none;
-}
-
 .mission-content-wrapper {
-  order: 1;
   position: relative;
   z-index: 2;
   max-width: 550px;
   width: 100%;
+}
+
+.intro-india-map {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.9;
+  animation: floatImage 4s ease-in-out infinite;
+}
+
+@keyframes floatImage {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
 }
 
 .mission-box {
@@ -1747,19 +1735,13 @@ footer {
   display: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .intro-mission {
-    flex-direction: column;
-    padding: 4rem 2rem;
+    grid-template-columns: 1fr;
+    padding: 0 2rem;
     gap: 3rem;
   }
-  .mission-bg-container {
-    order: 1;
-    width: 100%;
-    max-width: 400px;
-  }
   .mission-content-wrapper {
-    order: 2;
     text-align: center;
   }
   .mission-box {
