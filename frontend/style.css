@@ -1697,6 +1697,8 @@ footer {
   object-fit: contain;
   opacity: 0.9;
   animation: floatImage 4s ease-in-out infinite;
+  -webkit-mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 80%);
+  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 80%);
 }
 
 @keyframes floatImage {
