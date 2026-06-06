@@ -1511,12 +1511,16 @@ footer {
   60% { transform: scale(1); }
 }
 
-.mission-title {
+.intro-mission-title {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.2;
+  font-weight: 300;
+  max-width: 100%;
   color: #fff;
+  margin-bottom: 2rem;
+  overflow: visible;
+  white-space: nowrap;
 }
 
 .mission-tagline {
@@ -1566,6 +1570,10 @@ footer {
     max-width: 300px;
     margin-left: auto;
     margin-right: auto;
+  }
+  .intro-mission-title {
+    font-size: 2.2rem;
+    white-space: nowrap;
   }
 }
 
@@ -1712,14 +1720,6 @@ footer {
   text-align: left;
 }
 
-.mission-title {
-  font-size: clamp(2.5rem, 4vw, 3.8rem);
-  font-weight: 400;
-  line-height: 1.2;
-  margin-bottom: 2rem;
-  color: #fff;
-  text-shadow: none;
-}
 
 .mission-tagline {
   margin-bottom: 3rem;
