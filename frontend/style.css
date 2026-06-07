@@ -1697,8 +1697,15 @@ footer {
   object-fit: contain;
   opacity: 0.9;
   animation: floatImage 4s ease-in-out infinite;
-  -webkit-mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 80%);
-  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 80%);
+  mix-blend-mode: screen;
+  mask-image: 
+    linear-gradient(to left, transparent 0%, black 18%, black 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+  -webkit-mask-image: 
+    linear-gradient(to left, transparent 0%, black 18%, black 82%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
 }
 
 @keyframes floatImage {
