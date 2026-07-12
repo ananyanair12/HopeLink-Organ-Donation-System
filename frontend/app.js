@@ -7,6 +7,10 @@ const API = isLocal
   ? 'http://localhost:3000/api'
   : 'https://romantic-balance-production-5ab2.up.railway.app/api';
 
+function safeQuery(selector) {
+    return document.querySelector(selector);
+}
+
 console.log('API URL:', API);
 
 // ── Auth Gate & Intro Logic ──────────────────────────────────
@@ -15,35 +19,43 @@ const mainSite = document.getElementById('main-site');
 
 function checkAuth() {
     if (authToken) {
-        introPage.style.display = 'none';
-        mainSite.style.display = 'block';
-        mainSite.classList.add('active');
+        if (introPage) introPage.style.display = 'none';
+        if (mainSite) {
+            mainSite.style.display = 'block';
+            mainSite.classList.add('active');
+        }
         updateAuthUI();
         loadStats();
         if (currentUser?.role === 'hospital') initDashboard();
     } else {
-        introPage.style.display = 'block';
-        mainSite.style.display = 'none';
-        mainSite.classList.remove('active');
+        if (introPage) introPage.style.display = 'block';
+        if (mainSite) {
+            mainSite.style.display = 'none';
+            mainSite.classList.remove('active');
+        }
         initIntroPage();
     }
 }
 
 function enterSite() {
-    introPage.classList.add('fade-out');
+    if (introPage) introPage.classList.add('fade-out');
     setTimeout(() => {
-        introPage.style.display = 'none';
-        mainSite.style.display = 'block';
-        mainSite.classList.add('active', 'fade-in');
+        if (introPage) introPage.style.display = 'none';
+        if (mainSite) {
+            mainSite.style.display = 'block';
+            mainSite.classList.add('active', 'fade-in');
+        }
         window.scrollTo(0, 0);
     }, 800);
 }
 
 function exitSite() {
-    mainSite.classList.remove('fade-in');
-    mainSite.style.display = 'none';
-    introPage.style.display = 'block';
-    introPage.classList.remove('fade-out');
+    if (mainSite) mainSite.classList.remove('fade-in');
+    if (mainSite) mainSite.style.display = 'none';
+    if (introPage) {
+        introPage.style.display = 'block';
+        introPage.classList.remove('fade-out');
+    }
     window.scrollTo(0, 0);
     initIntroPage();
 }
@@ -93,44 +105,48 @@ function animateCounter(el, target) {
 
 // Intro CTA handlers
 document.querySelector('.intro-login-btn')?.addEventListener('click', () => {
-    document.querySelector('.auth-tab[data-tab="login"]').click();
-    authModal.classList.add('open');
+    document.querySelector('.auth-tab[data-tab="login"]')?.click();
+    authModal?.classList.add('open');
 });
 
 document.querySelector('.intro-signup-btn')?.addEventListener('click', () => {
-    document.querySelector('.auth-tab[data-tab="signup"]').click();
-    authModal.classList.add('open');
+    document.querySelector('.auth-tab[data-tab="signup"]')?.click();
+    authModal?.classList.add('open');
 });
 
 // ── Nav scroll highlight ─────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('section[id]');
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-        if (e.isIntersecting) {
-            navLinks.forEach(l => l.classList.remove('active'));
-            const active = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
-            if (active) active.classList.add('active');
-        }
-    });
-}, { threshold: 0.4 });
+if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                navLinks.forEach(l => l.classList.remove('active'));
+                const active = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+                if (active) active.classList.add('active');
+            }
+        });
+    }, { threshold: 0.4 });
 
-sections.forEach(s => observer.observe(s));
+    sections.forEach(s => observer.observe(s));
+}
 
 // Hamburger menu
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.querySelector('.nav-links');
 
-hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('open');
-});
-
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.remove('open');
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
     });
-});
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('open');
+        });
+    });
+}
 
 // ── Load stats ───────────────────────────────────────────────
 async function loadStats() {
@@ -180,7 +196,8 @@ function showOrganFields(organ, prefix = '') {
     }
 }
 
-document.getElementById('organ').addEventListener('change', e => showOrganFields(e.target.value));
+const organSelect = document.getElementById('organ');
+if (organSelect) organSelect.addEventListener('change', e => showOrganFields(e.target.value));
 
 // ── Registration form submit ─────────────────────────────────
 document.getElementById('reg-form').addEventListener('submit', async (e) => {
@@ -233,14 +250,19 @@ document.getElementById('reg-form').addEventListener('submit', async (e) => {
 });
 
 // ── Match form — show organ fields ───────────────────────────
-document.getElementById('m_organ').addEventListener('change', function () {
-    document.querySelectorAll('.match-organ-field').forEach(el => el.style.display = 'none');
-    const val = this.value.toLowerCase();
-    document.querySelectorAll(`.${val}-f`).forEach(el => el.style.display = 'flex');
-});
+const matchOrgan = document.getElementById('m_organ');
+if (matchOrgan) {
+    matchOrgan.addEventListener('change', function () {
+        document.querySelectorAll('.match-organ-field').forEach(el => el.style.display = 'none');
+        const val = this.value.toLowerCase();
+        document.querySelectorAll(`.${val}-f`).forEach(el => el.style.display = 'flex');
+    });
+}
 
 // ── Match form submit ────────────────────────────────────────
-document.getElementById('match-form').addEventListener('submit', async (e) => {
+const matchForm = document.getElementById('match-form');
+if (matchForm) {
+    matchForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const btn = document.getElementById('match-submit');
@@ -295,7 +317,8 @@ document.getElementById('match-form').addEventListener('submit', async (e) => {
         btnText.style.display = 'inline';
         spinner.style.display = 'none';
     }
-});
+    });
+}
 
 function buildDonorCard(d, organ, idx) {
     const organSpecific = buildOrganDetails(d, organ);
@@ -479,14 +502,16 @@ function renderOrganPieChart(stats) {
 }
 
 // Observe dashboard section to load data when visible
-const dashObserver = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-        initDashboard();
-        dashObserver.disconnect();
-    }
-}, { threshold: 0.1 });
-const dashSection = document.getElementById('dashboard');
-if (dashSection) dashObserver.observe(dashSection);
+if ('IntersectionObserver' in window) {
+    const dashObserver = new IntersectionObserver((entries) => {
+        if (entries[0]?.isIntersecting) {
+            initDashboard();
+            dashObserver.disconnect();
+        }
+    }, { threshold: 0.1 });
+    const dashSection = document.getElementById('dashboard');
+    if (dashSection) dashObserver.observe(dashSection);
+}
 
 // ── Notifications Logic ──────────────────────────────────────
 const BACKEND_URL = window.location.hostname === 'localhost'
