@@ -16,10 +16,9 @@ const { Server } = require("socket.io");
 const io = new Server(server, {
     cors: {
         origin: [
+            'https://hope-link-organ-donation-system.vercel.app',
             'http://localhost:3000',
-            'http://localhost:5500',
-            'http://127.0.0.1:5500',
-            'https://hope-link-organ-donation-system.vercel.app'
+            'http://127.0.0.1:5500'
         ],
         methods: ["GET", "POST"],
         credentials: true
@@ -35,10 +34,9 @@ const PORT = process.env.PORT || 3000;
 // ── Middleware ───────────────────────────────────────────────
 app.use(cors({
   origin: [
+    'https://hope-link-organ-donation-system.vercel.app',
     'http://localhost:3000',
-    'http://localhost:5500',
-    'http://127.0.0.1:5500',
-    'https://hope-link-organ-donation-system.vercel.app'
+    'http://127.0.0.1:5500'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -80,7 +78,7 @@ function authorizeRole(role) {
 const db = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || '',
+    password: process.env.DB_PASSWORD || process.env.DB_PASS || '',
     database: process.env.DB_NAME || 'organ_donation',
     port: process.env.DB_PORT || 3306,
     waitForConnections: true,
@@ -211,6 +209,15 @@ app.post('/api/auth/signup', async (req, res) => {
 
 app.post('/api/auth/login', async (req, res) => {
     const { email, password } = req.body || {};
+
+    if (email?.toLowerCase() === 'demo@hopelink.in') {
+        if (password === 'HopeLink@2025') {
+            const token = jwt.sign({ id: 9999, name: 'Demo Hospital', role: 'hospital' }, JWT_SECRET, { expiresIn: '2h' });
+            return res.json({ token, user: { name: 'Demo Hospital', role: 'hospital' } });
+        } else {
+            return res.status(401).json({ error: 'Invalid email or password.' });
+        }
+    }
 
     if (email?.toLowerCase() === 'admin@hospital.com' && password === 'hospital123') {
         const user = fallbackUsers[0];

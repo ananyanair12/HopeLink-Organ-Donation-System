@@ -2,10 +2,7 @@
    HOPELINK — Frontend JavaScript
    ============================================================ */
 
-const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API = isLocal 
-  ? 'http://localhost:3000/api'
-  : 'https://romantic-balance-production-5ab2.up.railway.app/api';
+const API = 'https://romantic-balance-production-5ab2.up.railway.app/api';
 
 function safeQuery(selector) {
     return document.querySelector(selector);
@@ -514,9 +511,7 @@ if ('IntersectionObserver' in window) {
 }
 
 // ── Notifications Logic ──────────────────────────────────────
-const BACKEND_URL = window.location.hostname === 'localhost'
-  ? 'http://localhost:3000'
-  : 'https://romantic-balance-production-5ab2.up.railway.app';
+const BACKEND_URL = 'https://romantic-balance-production-5ab2.up.railway.app';
 
 let socket;
 try {
@@ -633,6 +628,9 @@ authTabs.forEach(tab => {
         signupFields.style.display = isSignup ? 'block' : 'none';
         authSubmit.textContent = isSignup ? 'Sign Up' : 'Login';
         authError.textContent = '';
+        
+        const demoHint = document.getElementById('demo-login-hint');
+        if (demoHint) demoHint.style.display = isSignup ? 'none' : 'block';
     });
 });
 
