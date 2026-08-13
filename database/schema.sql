@@ -148,8 +148,8 @@ INSERT INTO heart_donors (name, age, gender, blood_group, phone, email, state, a
 ('Karan Singh', 28, 'M', 'B+', '+91 9988776655', 'karan@example.com', 'Delhi', 'Yes', 58, 'Mandeep Singh', 'Brother', '+91 9988776656');
 
 INSERT INTO liver_donors (name, age, gender, blood_group, phone, email, state, available, meld_score, hla_typing, emergency_name, relationship, emergency_phone) VALUES
-('Sunita Gupta', 50, 'F', 'AB+', '+91 9822334455', 'sunita@example.com', 'Gujarat', 'Yes', 12, 'Aman Gupta', 'Son', '+91 9822334456'),
-('Vikram Mehta', 38, 'M', 'A-', '+91 9766554433', 'vikram@example.com', 'Rajasthan', 'Yes', 15, 'Sonal Mehta', 'Wife', '+91 9766554434');
+('Sunita Gupta', 50, 'F', 'AB+', '+91 9822334455', 'sunita@example.com', 'Gujarat', 'Yes', 12, 'A1-B8-DR3', 'Aman Gupta', 'Son', '+91 9822334456'),
+('Vikram Mehta', 38, 'M', 'A-', '+91 9766554433', 'vikram@example.com', 'Rajasthan', 'Yes', 15, 'A2-B7-DR15', 'Sonal Mehta', 'Wife', '+91 9766554434');
 
 INSERT INTO lung_donors (name, age, gender, blood_group, phone, email, state, available, total_lung_cap, dlco, fev1, emergency_name, relationship, emergency_phone) VALUES
 ('Sanjay Rao', 55, 'M', 'O+', '+91 9544332211', 'sanjay@example.com', 'Tamil Nadu', 'Yes', 6.2, 28.5, 3.8, 'Laxmi Rao', 'Wife', '+91 9544332212');

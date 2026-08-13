@@ -2,7 +2,7 @@
    HOPELINK — Frontend JavaScript
    ============================================================ */
 
-const API = 'https://romantic-balance-production-5ab2.up.railway.app/api';
+const API = 'https://hopelink-backend.onrender.com/api';
 
 function safeQuery(selector) {
     return document.querySelector(selector);
@@ -511,7 +511,7 @@ if ('IntersectionObserver' in window) {
 }
 
 // ── Notifications Logic ──────────────────────────────────────
-const BACKEND_URL = 'https://romantic-balance-production-5ab2.up.railway.app';
+const BACKEND_URL = 'https://hopelink-backend.onrender.com';
 
 let socket;
 try {
